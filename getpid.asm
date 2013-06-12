@@ -29,17 +29,16 @@ start:
 	int 0x80                          ; Call  
 	mov ebx, 0xA                      ; Set divider to 10
 	lea ebp, [PID+6]                  ; LEA PID Buffer 6byte in
-	jmp ASCIIConv                     ; Run the loop to convert int to string
 ASCIIConv: 
 	div ebx                           ; Divide the PID
 	mov byte cl, [LookUpDig+edx]	  ; Copy ASCII value to CL
 	mov [ebp], cl                     ; Copy ASCII value to buffer
 	dec ebp                           ; Next byte into buffer
 	xor edx, edx                      ; Clear the remainder
-	inc eax                           ; Dec eax tricking jnz
-	dec eax                           ; Push back to original value
-	jnz ASCIIConv                     ; Keep looping until eax is zero
-	jz .printOut                       ; Print out the buffer
+	inc eax                           ; JNZ Hack
+        dec eax                           ; JNZ Hack
+        jnz ASCIIConv                     ; Keep looping until eax is zero
+	jz .printOut                      ; Print out the buffer
 .printOut:
 	push PIDLength                    ; Push PIDString Length
 	push PIDString                    ; Push PIDString
